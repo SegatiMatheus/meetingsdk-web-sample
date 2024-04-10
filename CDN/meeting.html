@@ -15,6 +15,49 @@
     <script src="https://source.zoom.us/3.5.2/lib/vendor/redux-thunk.min.js"></script>
     <script src="https://source.zoom.us/3.5.2/lib/vendor/lodash.min.js"></script>
     <script src="https://source.zoom.us/3.5.2/zoom-meeting-3.5.2.min.js"></script>
+
+    <input type="text" name="display_name" id="display_name" value="">
+    <input type="text" name="meeting_number" id="meeting_number" value="">
+    <input type="text" name="meeting_pwd" id="meeting_pwd" value="">
+    <input type="text" name="meeting_email" id="meeting_email" value="">
+    <input type="text" name="meeting_role" value="0">
+    <input type="text" name="meeting_china" value="0">
+    <input type="text" name="meeting_lang" value="pt-PT">
+
+    <script>
+        let params        = new URLSearchParams(window.location.search);
+        let name          = params.get("name");
+        let idZoomMeeting = params.get("mn");
+        let email         = params.get("email");
+        let password      = params.get("pwd");
+        let sdkKey        = params.get("sdkKey");
+        let clientSecret  = params.get("clientSecret");
+        let role          = params.get("role");
+        let china         = params.get("china");
+        let lang          = params.get("lang");
+
+        let nameInput   = document.getElementById('display_name');
+        nameInput.value = name;
+        
+        let meetingNumberInput   = document.getElementById('meeting_number');
+        meetingNumberInput.value = idZoomMeeting;
+
+        let meetingPwdInput   = document.getElementById('meeting_pwd');
+        meetingPwdInput.value = password;
+
+        let meetingEmailInput   = document.getElementById('meeting_email');
+        meetingEmailInput.value = email;
+
+        let roleInput   = document.getElementsByName('meeting_role')[0];
+        roleInput.value = role;
+
+        let chinaInput   = document.getElementsByName('meeting_china')[0];
+        chinaInput.value = china;
+
+        let langInput   = document.getElementsByName('meeting_lang')[0];
+        langInput.value = lang;
+    </script>
+
     <script src="js/tool.js"></script>
     <script src="js/vconsole.min.js"></script>
     <script src="js/meeting.js"></script>
