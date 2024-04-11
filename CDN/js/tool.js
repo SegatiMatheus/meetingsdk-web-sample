@@ -40,6 +40,9 @@ var testTool = {
                 document.getElementById("display_name").value
             ),
             pwd: document.getElementById("meeting_pwd").value,
+            sdkkey: document.getElementById("sdk_key").value,
+            client_secret: document.getElementById("client_secret").value,
+            pwd: document.getElementById("meeting_pwd").value,
             role: parseInt(document.getElementById("meeting_role").value, 10),
             email: testTool.b64EncodeUnicode(
                 document.getElementById("meeting_email").value

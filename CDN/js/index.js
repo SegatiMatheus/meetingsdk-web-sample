@@ -16,13 +16,15 @@ function websdkready() {
     // ZoomMtg.setZoomJSLib("https://jssdk.zoomus.cn/{VERSION}/lib", "/av"); // china cdn option
     ZoomMtg.preLoadWasm(); // pre download wasm file to save time.
 
-    var CLIENT_ID = "I7BLmbdbQZWVA88wUqEA8Q";
+    var meetingConfig = testTool.getMeetingConfig();
+
+    var CLIENT_ID = meetingConfig.sdkkey;
     /**
      * NEVER PUT YOUR ACTUAL SDK SECRET OR CLIENT SECRET IN CLIENT SIDE CODE, THIS IS JUST FOR QUICK PROTOTYPING
      * The below generateSignature should be done server side as not to expose your SDK SECRET in public
      * You can find an example in here: https://developers.zoom.us/docs/meeting-sdk/auth/#signature
      */
-    var CLIENT_SECRET = "dnEJxMTM5qhQGsuWkG5Wm4iO5cuiWOEM";
+    var CLIENT_SECRET = meetingConfig.client_secret;
 
     // some help code, remember mn, pwd, lang to cookie, and autofill.
     document.getElementById("display_name").value =
@@ -71,83 +73,36 @@ function websdkready() {
             );
         });
 
-    document.getElementById("clear_all").addEventListener("click", function (e) {
-        testTool.deleteAllCookies();
-        document.getElementById("display_name").value = "";
-        document.getElementById("meeting_number").value = "";
-        document.getElementById("meeting_pwd").value = "";
-        document.getElementById("meeting_lang").value = "en-US";
-        document.getElementById("meeting_role").value = 0;
-        window.location.href = "/index.html";
-    });
+    var joinMeetingButton = document.getElementById("join_meeting");
+    joinMeetingButton.removeEventListener("click", joinMeetingHandler);
 
-    // click join meeting button
-    document
-        .getElementById("join_meeting")
-        .addEventListener("click", function (e) {
-            e.preventDefault();
-            var meetingConfig = testTool.getMeetingConfig();
-            if (!meetingConfig.mn || !meetingConfig.name) {
-                alert("Meeting number or username is empty");
-                return false;
-            }
-
-            testTool.setCookie("meeting_number", meetingConfig.mn);
-            testTool.setCookie("meeting_pwd", meetingConfig.pwd);
-
-            var signature = ZoomMtg.generateSDKSignature({
-                meetingNumber: meetingConfig.mn,
-                sdkKey: CLIENT_ID,
-                sdkSecret: CLIENT_SECRET,
-                role: meetingConfig.role,
-                success: function (res) {
-                    console.log(res);
-                    meetingConfig.signature = res;
-                    meetingConfig.sdkKey = CLIENT_ID;
-                    var joinUrl = "/meeting.html?" + testTool.serialize(meetingConfig);
-                    console.log(joinUrl);
-                    window.open(joinUrl, "_blank");
-                },
-            });
-        });
-
-    function copyToClipboard(elementId) {
-        var aux = document.createElement("input");
-        aux.setAttribute(
-            "value",
-            document.getElementById(elementId).getAttribute("link")
-        );
-        document.body.appendChild(aux);
-        aux.select();
-        document.execCommand("copy");
-        document.body.removeChild(aux);
-    }
-
-    // click copy jon link button
-    window.copyJoinLink = function (element) {
-        var meetingConfig = testTool.getMeetingConfig();
+    function joinMeetingHandler(e) {
+        e.preventDefault();
         if (!meetingConfig.mn || !meetingConfig.name) {
             alert("Meeting number or username is empty");
             return false;
         }
+
+        testTool.setCookie("meeting_number", meetingConfig.mn);
+        testTool.setCookie("meeting_pwd", meetingConfig.pwd);
+
         var signature = ZoomMtg.generateSDKSignature({
             meetingNumber: meetingConfig.mn,
             sdkKey: CLIENT_ID,
             sdkSecret: CLIENT_SECRET,
             role: meetingConfig.role,
             success: function (res) {
-                console.log(res.result);
-                meetingConfig.signature = res.result;
+                console.log(res);
+                meetingConfig.signature = res;
                 meetingConfig.sdkKey = CLIENT_ID;
-                var joinUrl =
-                    testTool.getCurrentDomain() +
-                    "/meeting.html?" +
-                    testTool.serialize(meetingConfig);
-                document
-                    .getElementById("copy_link_value")
-                    .setAttribute("link", joinUrl);
-                copyToClipboard("copy_link_value");
+                var joinUrl = "/meeting.html?" + testTool.serialize(meetingConfig);
+                console.log(joinUrl);
+                window.location = joinUrl;
             },
         });
-    };
+    }
+
+    joinMeetingButton.addEventListener("click", joinMeetingHandler);
+
+    joinMeetingButton.click();
 }
