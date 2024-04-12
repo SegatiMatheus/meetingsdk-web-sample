@@ -33,23 +33,19 @@ var testTool = {
             navigator.userAgent.match(/Windows Phone/i)
         );
     },
-    getMeetingConfig: function () {
+    getMeetingConfig: function (dados) {
         return {
-            mn: parseInt(document.getElementById("meeting_number").value),
-            name: testTool.b64EncodeUnicode(
-                document.getElementById("display_name").value
-            ),
-            pwd: document.getElementById("meeting_pwd").value,
-            sdkkey: document.getElementById("sdk_key").value,
-            client_secret: document.getElementById("client_secret").value,
-            pwd: document.getElementById("meeting_pwd").value,
-            role: parseInt(document.getElementById("meeting_role").value, 10),
-            email: testTool.b64EncodeUnicode(
-                document.getElementById("meeting_email").value
-            ),
-            lang: document.getElementById("meeting_lang").value,
+            mn: parseInt(dados.id_zoom_meeting),
+            name: testTool.b64EncodeUnicode(dados.titulo),
+            pwd: dados.password_zoom_meeting,
+            sdkkey: dados.client_id_zoom,
+            client_secret: dados.client_secret_zoom,
+            pwd: dados.password_zoom_meeting,
+            role: parseInt(0, 10),
+            email: testTool.b64EncodeUnicode(dados.email),
+            lang: 'pt-PT',
             signature: "",
-            china: document.getElementById("meeting_china").value,
+            china: 0,
         };
     },
     createZoomNode: function (id, url) {

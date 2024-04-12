@@ -10,57 +10,10 @@
 </head>
 
 <body>
-    <style>
-        .sdk-select {
-            height: 34px;
-            border-radius: 4px;
-        }
-
-        .websdktest button {
-            float: right;
-            margin-left: 5px;
-        }
-
-        #nav-tool {
-            margin-bottom: 0px;
-        }
-
-        #show-test-tool {
-            position: absolute;
-            top: 100px;
-            left: 0;
-            display: block;
-            z-index: 99999;
-        }
-
-        #display_name {
-            width: 250px;
-        }
-
-
-        #websdk-iframe {
-            width: 700px;
-            height: 500px;
-            border: 1px;
-            border-color: red;
-            border-style: dashed;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            left: 50%;
-            margin: 0;
-        }
-    </style>
-
     <nav id="nav-tool" class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
-            <div class="navbar-header">
-                <a class="navbar-brand" href="#">Zoom WebSDK CDN</a>
-            </div>
             <div id="navbar" class="websdktest">
                 <form class="navbar-form navbar-right" id="meeting_form">
-
                     <input type="hidden" name="display_name" id="display_name" value="">
                     <input type="hidden" name="meeting_number" id="meeting_number" value="">
                     <input type="hidden" name="meeting_email" id="meeting_email" value="">
@@ -70,33 +23,13 @@
                     <input type="hidden" name="meeting_role" id="meeting_role" value="0">
                     <input type="hidden" name="meeting_china" id="meeting_china" value="0">
                     <input type="hidden" name="meeting_lang" id="meeting_lang" value="pt-PT">
-
-                    <button type="submit" class="btn btn-primary" id="join_meeting">Join</button>
-
-                    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-                    <script>
-                        let params        = new URLSearchParams(window.location.search);
-                        let idAula          = params.get("idAula");
-                        let token = params.get("token");
-
-                        axios.get(`http://localhost/4selet/public/api/buscas/dados-zoom/${idAula}/${token}`, {
-                            headers: {
-                                "Content-Type": "application/json",
-                                "Authorization": `Bearer ${token}`
-                            }
-                        })
-                        .then(response => {
-                            console.log(response.data);
-                        })
-                        .catch(error => {
-                            console.error(error);
-                        });
-                    </script>
                 </form>
             </div>
         </div>
     </nav>
-    
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
     <script src="https://source.zoom.us/3.5.2/lib/vendor/react.min.js"></script>
     <script src="https://source.zoom.us/3.5.2/lib/vendor/react-dom.min.js"></script>
     <script src="https://source.zoom.us/3.5.2/lib/vendor/redux.min.js"></script>
