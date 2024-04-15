@@ -36,13 +36,13 @@ var testTool = {
     getMeetingConfig: function (dados) {
         return {
             mn: parseInt(dados.id_zoom_meeting),
-            name: testTool.b64EncodeUnicode(dados.titulo),
+            name: testTool.b64EncodeUnicode(dados.titulo_aula),
             pwd: dados.password_zoom_meeting,
-            sdkkey: dados.client_id_zoom,
-            client_secret: dados.client_secret_zoom,
+            sdkkey: dados.client_id,
+            client_secret: dados.client_secret,
             pwd: dados.password_zoom_meeting,
             role: parseInt(0, 10),
-            email: testTool.b64EncodeUnicode(dados.email),
+            email: testTool.b64EncodeUnicode(dados.email_aluno),
             lang: 'pt-PT',
             signature: "",
             china: 0,

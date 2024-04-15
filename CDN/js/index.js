@@ -70,6 +70,7 @@ function websdkready() {
         return new Promise((resolve, reject) => {
             // e.preventDefault();
             var meetingConfig = testTool.getMeetingConfig(dados);
+            console.log('meetingConfig', meetingConfig);
             var CLIENT_ID = meetingConfig.sdkkey;
             var CLIENT_SECRET = meetingConfig.client_secret;
             if (!meetingConfig.mn || !meetingConfig.name) {
@@ -86,7 +87,6 @@ function websdkready() {
                 sdkSecret: CLIENT_SECRET,
                 role: meetingConfig.role,
                 success: function (res) {
-                    console.log(res);
                     meetingConfig.signature = res;
                     signatureKey = res;
                     meetingConfig.sdkKey = CLIENT_ID;
@@ -104,30 +104,29 @@ function websdkready() {
 
     // joinMeetingButton.addEventListener("click", joinMeetingHandler);
 
-    let params = new URLSearchParams(window.location.search);
-    let idAula = params.get("idAula");
-    let token  = params.get("token");
+    let params         = new URLSearchParams(window.location.search);
+    let authorization  = params.get("authorization");
+    let token          = params.get("token");
 
-    axios.get(`http://localhost/4selet/public/api/buscas/dados-zoom/${idAula}/${token}`, {
+    axios.get(`http://localhost/4selet/public/api/buscas/dados-zoom/${token}`, {
         headers: {
             "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}`
+            "Authorization": `Bearer ${authorization}`
         }
     })
     .then(response => {
         let dados = response.data;
         
-        $('#display_name').val(dados.titulo);
+        $('#display_name').val(dados.titulo_aula);
         $('#meeting_number').val(dados.id_zoom_meeting);
         $('#meeting_pwd').val(dados.password_zoom_meeting);
-        $('#sdk_key').val(dados.client_id_zoom);
-        $('#client_secret').val(dados.client_secret_zoom);
-        $('#meeting_email').val(dados.email);
+        $('#sdk_key').val(dados.client_id);
+        $('#client_secret').val(dados.client_secret);
+        $('#meeting_email').val(dados.email_aluno);
         
         joinMeetingHandler(dados)
         .then(() => {
             dados.signature = signatureKey;
-            console.log('sadfjnaspijf aspdf m', dados);
             websdkready2(dados);
         })
         .catch(error => {
@@ -143,16 +142,16 @@ function websdkready2(dados) {
     var testTool = window.testTool;
     // get meeting args from url
     var tmpArgs = testTool.parseQuery();
-    
+    console.log('dad', dados);
     var meetingConfig = {
-        sdkKey: dados.client_id_zoom,
+        sdkKey: dados.client_id,
         meetingNumber: dados.id_zoom_meeting,
         userName: (function () {
-            if (dados.titulo) {
+            if (dados.titulo_aula) {
                 try {
-                    return testTool.b64DecodeUnicode(dados.titulo);
+                    return testTool.b64DecodeUnicode(dados.titulo_aula);
                 } catch (e) {
-                    return dados.titulo;
+                    return dados.titulo_aula;
                 }
             }
             return (
@@ -168,9 +167,9 @@ function websdkready2(dados) {
         role: parseInt(0, 10),
         userEmail: (function () {
             try {
-                return testTool.b64DecodeUnicode(dados.email);
+                return testTool.b64DecodeUnicode(dados.email_aluno);
             } catch (e) {
-                return dados.email;
+                return dados.email_aluno;
             }
         })(),
         lang: 'pt-PT',
@@ -194,6 +193,7 @@ function websdkready2(dados) {
 
     function beginJoin(signature) {
         ZoomMtg.i18n.load(meetingConfig.lang);
+        console.log('meetingConfig', meetingConfig);
         ZoomMtg.init({
             leaveUrl: meetingConfig.leaveUrl,
             webEndpoint: meetingConfig.webEndpoint,
