@@ -16,4 +16,8 @@ module.exports = {
       "process.env.BABEL_ENV": JSON.stringify("development"),
     }),
   ],
+  devServer: {
+    compress: true,
+    allowedHosts: 'all'
+  }
 };
